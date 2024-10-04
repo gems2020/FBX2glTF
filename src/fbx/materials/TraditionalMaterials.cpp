@@ -128,7 +128,15 @@ std::unique_ptr<FbxTraditionalMaterialInfo> FbxTraditionalMaterialResolver::reso
   }
   // FBX color is RGB, so we calculate the A channel as the average of the FBX transparency color
   // vector
-  res->colDiffuse[3] = 1.0 - (transparency[0] + transparency[1] + transparency[2]) / 3.0;
+  //If a transparency texture exists, the alpha value is temporarily set to 1.0; otherwise, it is calculated from RGB transparency values.
+  if (colTex) 
+  {
+    res->colDiffuse[3] = 1.0;
+  }
+  else
+  {
+    res->colDiffuse[3] = 1.0 - (transparency[0] + transparency[1] + transparency[2]) / 3.0;
+  }
 
   return res;
 }
